@@ -4,10 +4,12 @@ import Header from '../../components/Dashboard/Header'
 import Terminal from '../../components/Dashboard/Terminal'
 import { minecraftApi } from '../../api/minecraft'
 import { toast } from 'sonner'
+import { useUserRole } from '../../hooks/useUserRole'
 
 const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 export default function Console () {
+  const { isReadOnly } = useUserRole()
   const [logs, setLogs] = useState<string[]>([])
   const [socket, setSocket] = useState<Socket | null>(null)
   const [connected, setConnected] = useState(false)
@@ -51,6 +53,10 @@ export default function Console () {
   }, [])
 
   const handleCommand = async (command: string) => {
+    if (isReadOnly) {
+      toast.error('Read-only users cannot send commands')
+      return
+    }
     try {
       const result = await minecraftApi.sendCommand(command)
       if (result.success) {
@@ -81,7 +87,7 @@ export default function Console () {
               </p>
             </div>
           )}
-          <Terminal logs={logs} onCommand={handleCommand} />
+          <Terminal logs={logs} onCommand={handleCommand} readOnly={isReadOnly} />
         </div>
       </div>
     </div>

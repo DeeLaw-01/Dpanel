@@ -2,8 +2,18 @@ import { useState } from 'react'
 import { Server, Lock } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-const ADMIN_USERNAME = 'admin'
-const ADMIN_PASSWORD = 'WEAREkakashi22@@a'
+const USERS = {
+  admin: {
+    username: 'admin',
+    password: 'WEAREkakashi22@@a',
+    role: 'admin' as const
+  },
+  readonly: {
+    username: 'iamafailure',
+    password: 'annoyingtobearound',
+    role: 'readonly' as const
+  }
+}
 
 export default function LoginPage () {
   const [username, setUsername] = useState('')
@@ -17,11 +27,16 @@ export default function LoginPage () {
     setError('')
     setLoading(true)
 
-    // Simple authentication check
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    // Check credentials
+    const user = Object.values(USERS).find(
+      u => u.username === username && u.password === password
+    )
+
+    if (user) {
       // Store auth in sessionStorage
       sessionStorage.setItem('dpanel_authenticated', 'true')
       sessionStorage.setItem('dpanel_username', username)
+      sessionStorage.setItem('dpanel_role', user.role)
 
       // Redirect to dashboard
       setTimeout(() => {

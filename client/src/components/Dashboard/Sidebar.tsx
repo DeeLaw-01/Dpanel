@@ -8,6 +8,7 @@ import {
   Server,
   LogOut
 } from 'lucide-react'
+import { useUserRole } from '../../hooks/useUserRole'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -20,10 +21,12 @@ const navigation = [
 export default function Sidebar () {
   const location = useLocation()
   const navigate = useNavigate()
+  const { role, isReadOnly } = useUserRole()
 
   const handleLogout = () => {
     sessionStorage.removeItem('dpanel_authenticated')
     sessionStorage.removeItem('dpanel_username')
+    sessionStorage.removeItem('dpanel_role')
     navigate('/login')
   }
 
@@ -66,6 +69,9 @@ export default function Sidebar () {
         <div className='text-xs text-gray-400'>
           <p className='text-gray-300 font-medium mb-1'>Logged in as</p>
           <p className='text-green-400 font-semibold'>{username}</p>
+          <p className='text-gray-500 text-xs mt-1'>
+            {isReadOnly ? 'Read-only' : 'Administrator'}
+          </p>
         </div>
         <button
           onClick={handleLogout}

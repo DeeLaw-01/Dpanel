@@ -4,9 +4,10 @@ import { Send } from 'lucide-react';
 interface TerminalProps {
   logs: string[];
   onCommand: (command: string) => void;
+  readOnly?: boolean;
 }
 
-export default function Terminal({ logs, onCommand }: TerminalProps) {
+export default function Terminal({ logs, onCommand, readOnly = false }: TerminalProps) {
   const [command, setCommand] = useState('');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -81,6 +82,11 @@ export default function Terminal({ logs, onCommand }: TerminalProps) {
 
       {/* Command Input */}
       <form onSubmit={handleSubmit} className="border-t border-gray-700 p-4">
+        {readOnly && (
+          <div className="mb-3 bg-yellow-900/50 border border-yellow-700 text-yellow-200 px-3 py-2 rounded-lg text-sm">
+            <p>Read-only mode: You can view logs but cannot send commands</p>
+          </div>
+        )}
         <div className="flex gap-2">
           <span className="text-green-500 font-mono self-center">$</span>
           <input
@@ -89,20 +95,24 @@ export default function Terminal({ logs, onCommand }: TerminalProps) {
             value={command}
             onChange={(e) => setCommand(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Enter server command (e.g., list, stop, say Hello)"
-            className="flex-1 bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-green-500"
+            placeholder={readOnly ? "Read-only mode - commands disabled" : "Enter server command (e.g., list, stop, say Hello)"}
+            disabled={readOnly}
+            className="flex-1 bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex items-center gap-2 transition-colors"
+            disabled={readOnly}
+            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white px-4 py-2 rounded flex items-center gap-2 transition-colors"
           >
             <Send className="h-4 w-4" />
             Send
           </button>
         </div>
-        <p className="mt-2 text-xs text-gray-500">
-          Use ↑/↓ arrow keys to navigate command history
-        </p>
+        {!readOnly && (
+          <p className="mt-2 text-xs text-gray-500">
+            Use ↑/↓ arrow keys to navigate command history
+          </p>
+        )}
       </form>
     </div>
   );

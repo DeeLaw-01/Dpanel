@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Save, RotateCcw } from 'lucide-react';
+import { Save, RotateCcw, Lock } from 'lucide-react';
 import Header from '../../components/Dashboard/Header';
 import { minecraftApi } from '../../api/minecraft';
 import { toast } from 'sonner';
+import { useUserRole } from '../../hooks/useUserRole';
 
 export default function BukkitSpigotEditor() {
+  const { isReadOnly } = useUserRole();
   const [activeTab, setActiveTab] = useState<'bukkit' | 'spigot'>('bukkit');
   const [bukkitConfig, setBukkitConfig] = useState<any>(null);
   const [spigotConfig, setSpigotConfig] = useState<any>(null);
@@ -114,6 +116,13 @@ export default function BukkitSpigotEditor() {
       
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-4xl mx-auto">
+          {isReadOnly && (
+            <div className="mb-6 bg-yellow-900/50 border border-yellow-700 text-yellow-200 px-4 py-3 rounded-lg flex items-center gap-2">
+              <Lock className="h-5 w-5" />
+              <p className="text-sm font-medium">Read-only mode: You can view configuration but cannot make changes</p>
+            </div>
+          )}
+          
           {/* Tabs */}
           <div className="flex gap-2 mb-6 border-b border-gray-700">
             <button
@@ -144,7 +153,7 @@ export default function BukkitSpigotEditor() {
               <div className="flex gap-3 mb-6">
                 <button
                   onClick={handleSaveBukkit}
-                  disabled={!bukkitHasChanges || saving}
+                  disabled={!bukkitHasChanges || saving || isReadOnly}
                   className="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   <Save className="h-4 w-4" />
@@ -152,7 +161,7 @@ export default function BukkitSpigotEditor() {
                 </button>
                 <button
                   onClick={handleResetBukkit}
-                  disabled={!bukkitHasChanges}
+                  disabled={!bukkitHasChanges || isReadOnly}
                   className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   <RotateCcw className="h-4 w-4" />
@@ -175,11 +184,13 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={bukkitConfig['spawn-limits']?.monsters || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setBukkitConfig({
                         ...bukkitConfig,
                         'spawn-limits': { ...bukkitConfig['spawn-limits'], monsters: parseInt(e.target.value) }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      disabled={isReadOnly}
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -187,11 +198,12 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={bukkitConfig['spawn-limits']?.animals || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setBukkitConfig({
                         ...bukkitConfig,
                         'spawn-limits': { ...bukkitConfig['spawn-limits'], animals: parseInt(e.target.value) }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -199,11 +211,12 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={bukkitConfig['spawn-limits']?.['water-animals'] || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setBukkitConfig({
                         ...bukkitConfig,
                         'spawn-limits': { ...bukkitConfig['spawn-limits'], 'water-animals': parseInt(e.target.value) }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -211,11 +224,12 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={bukkitConfig['spawn-limits']?.ambient || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setBukkitConfig({
                         ...bukkitConfig,
                         'spawn-limits': { ...bukkitConfig['spawn-limits'], ambient: parseInt(e.target.value) }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -230,11 +244,12 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={bukkitConfig['ticks-per']?.['animal-spawns'] || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setBukkitConfig({
                         ...bukkitConfig,
                         'ticks-per': { ...bukkitConfig['ticks-per'], 'animal-spawns': parseInt(e.target.value) }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -242,11 +257,12 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={bukkitConfig['ticks-per']?.['monster-spawns'] || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setBukkitConfig({
                         ...bukkitConfig,
                         'ticks-per': { ...bukkitConfig['ticks-per'], 'monster-spawns': parseInt(e.target.value) }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -260,7 +276,7 @@ export default function BukkitSpigotEditor() {
               <div className="flex gap-3 mb-6">
                 <button
                   onClick={handleSaveSpigot}
-                  disabled={!spigotHasChanges || saving}
+                  disabled={!spigotHasChanges || saving || isReadOnly}
                   className="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   <Save className="h-4 w-4" />
@@ -268,7 +284,7 @@ export default function BukkitSpigotEditor() {
                 </button>
                 <button
                   onClick={handleResetSpigot}
-                  disabled={!spigotHasChanges}
+                  disabled={!spigotHasChanges || isReadOnly}
                   className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   <RotateCcw className="h-4 w-4" />
@@ -291,6 +307,7 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={spigotConfig['world-settings']?.default?.['mob-spawn-range'] || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setSpigotConfig({
                         ...spigotConfig,
                         'world-settings': {
@@ -301,7 +318,7 @@ export default function BukkitSpigotEditor() {
                           }
                         }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -309,6 +326,7 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={spigotConfig['world-settings']?.default?.['view-distance'] || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setSpigotConfig({
                         ...spigotConfig,
                         'world-settings': {
@@ -319,7 +337,7 @@ export default function BukkitSpigotEditor() {
                           }
                         }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -334,6 +352,7 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={spigotConfig['world-settings']?.default?.['entity-activation-range']?.animals || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setSpigotConfig({
                         ...spigotConfig,
                         'world-settings': {
@@ -347,7 +366,7 @@ export default function BukkitSpigotEditor() {
                           }
                         }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -355,6 +374,7 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={spigotConfig['world-settings']?.default?.['entity-activation-range']?.monsters || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setSpigotConfig({
                         ...spigotConfig,
                         'world-settings': {
@@ -368,7 +388,7 @@ export default function BukkitSpigotEditor() {
                           }
                         }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -376,6 +396,7 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={spigotConfig['world-settings']?.default?.['entity-activation-range']?.raiders || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setSpigotConfig({
                         ...spigotConfig,
                         'world-settings': {
@@ -389,7 +410,7 @@ export default function BukkitSpigotEditor() {
                           }
                         }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div>
@@ -397,6 +418,7 @@ export default function BukkitSpigotEditor() {
                     <input
                       type="number"
                       value={spigotConfig['world-settings']?.default?.['entity-activation-range']?.misc || 0}
+                      disabled={isReadOnly}
                       onChange={(e) => setSpigotConfig({
                         ...spigotConfig,
                         'world-settings': {
@@ -410,7 +432,7 @@ export default function BukkitSpigotEditor() {
                           }
                         }
                       })}
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500"
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
