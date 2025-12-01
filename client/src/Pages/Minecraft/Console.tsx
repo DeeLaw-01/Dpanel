@@ -78,7 +78,7 @@ export default function Console () {
         subtitle='View logs and execute server commands'
       />
 
-      <div className='flex-1 p-6 overflow-hidden'>
+      <div className='flex-1 p-4 md:p-6 overflow-hidden'>
         <div className='h-full flex flex-col'>
           {!connected && (
             <div className='mb-4 bg-yellow-900 border border-yellow-700 text-yellow-200 px-4 py-2 rounded-lg'>

@@ -33,7 +33,7 @@ export default function Sidebar () {
   const username = sessionStorage.getItem('dpanel_username') || 'Admin'
 
   return (
-    <div className='flex h-screen w-64 flex-col bg-gray-900 border-r border-gray-800'>
+    <div className='hidden md:flex h-screen w-64 flex-col bg-gray-900 border-r border-gray-800'>
       {/* Logo */}
       <div className='flex h-16 items-center gap-2 px-6 border-b border-gray-800'>
         <Server className='h-8 w-8 text-green-500' />

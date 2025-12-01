@@ -59,9 +59,9 @@ export default function Dashboard() {
         subtitle="Monitor your Minecraft server in real-time"
       />
       
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6">
         {/* Main Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-4 md:mb-6">
           <StatsCard
             title="CPU Usage"
             value={`${stats.cpuUsage.toFixed(1)}%`}
@@ -104,7 +104,7 @@ export default function Dashboard() {
         </div>
 
         {/* Server Info */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-white mb-4">Server Information</h2>
             <div className="space-y-3">

@@ -114,7 +114,7 @@ export default function BukkitSpigotEditor() {
         subtitle="Edit bukkit.yml and spigot.yml"
       />
       
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6">
         <div className="max-w-4xl mx-auto">
           {isReadOnly && (
             <div className="mb-6 bg-yellow-900/50 border border-yellow-700 text-yellow-200 px-4 py-3 rounded-lg flex items-center gap-2">
