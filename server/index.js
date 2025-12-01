@@ -16,7 +16,10 @@ app.use(
     origin: [
       'http://localhost:5173',
       'http://localhost:3000',
-      process.env.CORS_ORIGIN || 'http://localhost:5173'
+      'http://143.198.194.160:5173',
+      'http://www.143.198.194.160:5173',
+      'http://143.198.194.160:3000',
+      process.env.CORS_ORIGIN || '*'
     ].filter(Boolean)
   })
 )
@@ -25,7 +28,7 @@ app.use(
 app.use('/api/minecraft', minecraftRoutes)
 
 app.get('/', (_, res) => {
-  res.json({ 
+  res.json({
     message: 'DPanel Minecraft Dashboard API',
     status: 'running',
     version: '1.0.0'
@@ -43,7 +46,9 @@ const io = new Server(server, {
     origin: [
       'http://localhost:5173',
       'http://localhost:3000',
-      process.env.CORS_ORIGIN || 'http://localhost:5173'
+      'http://143.198.194.160:5173',
+      'http://143.198.194.160:3000',
+      process.env.CORS_ORIGIN || '*'
     ].filter(Boolean),
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
@@ -57,5 +62,7 @@ io.on('connection', socket => {
 
 server.listen(PORT, () => {
   console.log(`🚀 DPanel server is running on port ${PORT}`)
-  console.log(`📊 Minecraft dashboard API: http://localhost:${PORT}/api/minecraft`)
+  console.log(
+    `📊 Minecraft dashboard API: http://localhost:${PORT}/api/minecraft`
+  )
 })
