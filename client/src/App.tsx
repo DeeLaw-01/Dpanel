@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import Sidebar from './components/Dashboard/Sidebar'
-import Dashboard from './pages/Minecraft/Dashboard'
-import Console from './pages/Minecraft/Console'
-import Stats from './pages/Minecraft/Stats'
-import ConfigEditor from './pages/Minecraft/ConfigEditor'
-import BukkitSpigotEditor from './pages/Minecraft/BukkitSpigotEditor'
+import Dashboard from './Pages/Minecraft/Dashboard'
+import Console from './Pages/Minecraft/Console'
+import Stats from './Pages/Minecraft/Stats'
+import ConfigEditor from './Pages/Minecraft/ConfigEditor'
+import BukkitSpigotEditor from './Pages/Minecraft/BukkitSpigotEditor'
 
 function App () {
   return (
