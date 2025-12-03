@@ -189,7 +189,6 @@ export default function BukkitSpigotEditor() {
                         ...bukkitConfig,
                         'spawn-limits': { ...bukkitConfig['spawn-limits'], monsters: parseInt(e.target.value) }
                       })}
-                      disabled={isReadOnly}
                       className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
